@@ -19,31 +19,39 @@ function gameOverCheck() {
   }
 }
 
-function attackHandler() {
-  const damage = dealMonsterDamage(ATTACK_VALUE);
+function playerAction(mode) {
+  let maxDamage;
+  let maxHeal;
+  if (mode === "ATTACK") {
+    maxDamage = ATTACK_VALUE;
+  } else if (mode === "STRONG ATTACK") {
+    maxDamage = STRONG_ATTACK_VALUE;
+  } else if (mode === "HEAL") {
+    maxHeal = PLAYER_HEAL_VALUE;
+  }
+  const damage = dealMonsterDamage(maxDamage);
+  const heal = increasePlayerHealth(maxHeal);
+  playerCurrentLife += heal;
   monsterCurrentLife -= damage;
-
-  monsterAttackHandler();
+  monsterAttack();
   gameOverCheck();
+}
+
+function attackHandler() {
+  playerAction("ATTACK");
 }
 
 function strongAttackHandler() {
-  const heavyDamage = dealMonsterDamage(STRONG_ATTACK_VALUE);
-  monsterCurrentLife -= heavyDamage;
-  monsterAttackHandler();
-  gameOverCheck();
-}
-
-function monsterAttackHandler() {
-  const playerRecievedDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
-  playerCurrentLife -= playerRecievedDamage;
+  playerAction("STRONG ATTACK");
 }
 
 function playerHealHandler() {
-  const playerHeal = increasePlayerHealth(PLAYER_HEAL_VALUE);
-  playerCurrentLife += playerHeal;
-  monsterAttackHandler();
-  gameOverCheck();
+  playerAction("HEAL");
+}
+
+function monsterAttack() {
+  const playerRecievedDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
+  playerCurrentLife -= playerRecievedDamage;
 }
 
 attackBtn.addEventListener("click", attackHandler);
