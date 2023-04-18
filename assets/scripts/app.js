@@ -39,5 +39,13 @@ function monsterAttackHandler() {
   playerCurrentLife -= playerRecievedDamage;
 }
 
+function playerHealHandler() {
+  const playerHeal = increasePlayerHealth(PLAYER_HEAL_VALUE);
+  playerCurrentLife += playerHeal;
+  monsterAttackHandler();
+  gameOverCheck();
+}
+
 attackBtn.addEventListener("click", attackHandler);
 strongAttackBtn.addEventListener("click", strongAttackHandler);
+healBtn.addEventListener("click", playerHealHandler);
